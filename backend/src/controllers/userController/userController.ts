@@ -30,6 +30,20 @@ export const createUserController = async (
   }
 
   try {
+    // Define the user limit
+    const USER_LIMIT = 100;
+
+    // Check the current number of users in the database
+    const userCount = await Users.countDocuments();
+    
+    if (userCount >= USER_LIMIT) {
+      res.status(403).json({
+        error:
+          "User limit reached. Please contact your administrator to increase the user limit.",
+      });
+      return;
+    }
+
     const { first_name, second_name, username, email, password }: UserType =
       req.body;
 
@@ -75,14 +89,14 @@ export const createUserController = async (
     const savedUser = await newUser.save();
     const savedUserPlan = await newUserPlan.save();
 
-    // generate JWT Token for verify account
+    // Generate JWT Token for verifying the account
     const JWT_SECRET = process.env.JWT_SECRET;
     const authToken = jwt.sign({ email: email }, `${JWT_SECRET}`, {
       expiresIn: "60m",
     });
 
     // Return a success response
-    if (savedUser || savedUserPlan) {
+    if (savedUser && savedUserPlan) {
       res.status(201).json({
         message: "User created successfully",
         verifyToken: authToken,
