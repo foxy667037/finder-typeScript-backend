@@ -5,6 +5,7 @@ import {
   verifyUserController,
   getUserDetailsController,
   deleteUserController,
+  logoutUserController
 } from "../../controllers/userController/userController.js";
 import {
   validateCreateUser,
@@ -29,5 +30,8 @@ router.get("/details", fetchUserData, getUserDetailsController);
 
 // Route for delete a user
 router.delete("/delete", fetchUserData, deleteUserController);
+
+// Route for logout user
+router.get("/logout", fetchUserData, logoutUserController);
 
 export default router;

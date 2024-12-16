@@ -1,9 +1,5 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
-import moment from "moment-timezone";
-
-const formatDate = () => {
-  return moment.tz("Asia/Karachi").format("HH:mm:ss YYYY/MM/DD");
-};
+import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.js";
 
 export interface UserType extends Document {
   googleId?: string | null;
@@ -36,7 +32,7 @@ const UserSchema: Schema<UserType> = new Schema({
   },
   SignInWith: { type: String, default: "null" },
   verifyStatus: { type: String, default: "pending" },
-  created_at: { type: String, default: formatDate },
+  created_at: { type: String, default: formatDateHelper },
   verified_at: { type: String, default: null },
 });
 

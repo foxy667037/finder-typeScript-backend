@@ -1,8 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { getIpDetails } from "../../helpers/getIpDetailsHelper/getIpDetailsHelper.js";
+import { getIpDetailsHelper } from "../../helpers/getIpDetailsHelper/getIpDetailsHelper.js";
 import IpAddressDetailsData from "../../models/IpAddressDetailsData/IpAddressDetailsData.js";
 import UsersPlans from "../../models/UsersPlans/UsersPlans.js";
 import { validationResult } from "express-validator";
+import UsersBehaviours, {
+  UserBehaviourType,
+} from "../../models/UsersBehaviour/UsersBehaviour.js";
+import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.js";
 
 // Controller to get IP address details and return geolocation data
 export const getIpAddressDetailsController = async (
@@ -25,7 +29,7 @@ export const getIpAddressDetailsController = async (
     }
 
     // Get IP details
-    const locationData = await getIpDetails(ip);
+    const locationData = await getIpDetailsHelper(ip);
 
     if (!locationData) {
       res.status(404).json({ error: "Location not found for the given IP." });
@@ -81,6 +85,7 @@ export const getIpAddressDetailsController = async (
       },
     };
 
+    // save data
     const newfetchedData = new IpAddressDetailsData({
       user_id: id,
       username: username,
@@ -91,8 +96,22 @@ export const getIpAddressDetailsController = async (
     // save the ip details user data
     const savedfetchedData = await newfetchedData.save();
 
+    // save behaviour
+    const pendingBehaviour: UserBehaviourType = new UsersBehaviours({
+      user_id: id,
+      username: username,
+      email: email,
+      action: `fetch ip (${ip}) details`,
+      action_performed_at: formatDateHelper(),
+    });
+
+    const savedBehaviour = await pendingBehaviour.save();
+
     // Respond with location data
-    res.json({ "Save Response Data: ": savedfetchedData });
+    if (savedfetchedData || savedBehaviour) {
+      res.status(200).json({ Success: "Location Data Retrived Successfully" });
+      return;
+    }
   } catch (err) {
     res.status(500).json({ error: (err as Error).message });
   } finally {
@@ -166,7 +185,7 @@ export const externalIpAddressController = async (
           return;
         }
 
-        const locationData = await getIpDetails(String(ip));
+        const locationData = await getIpDetailsHelper(String(ip));
         if (!locationData) {
           res.status(404).json({ error: "IP details not found" });
           return;

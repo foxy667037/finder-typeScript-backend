@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import moment from "moment-timezone";
 import { validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 import Users, { UserType } from "../../models/Users/Users.js";
@@ -10,12 +9,12 @@ import IpAddressDetailsData from "../../models/IpAddressDetailsData/IpAddressDet
 import generateRandomStringHelper from "../../helpers/generateRandomStringHelper/generateRandomStringHelper.js";
 import UsersPlans from "../../models/UsersPlans/UsersPlans.js";
 import { UserPlanType } from "../../models/UsersPlans/UsersPlans.js";
+import UsersBehaviours, {
+  UserBehaviourType,
+} from "../../models/UsersBehaviour/UsersBehaviour.js";
+import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.js";
 
 dotenv.config();
-
-const formatDate = () => {
-  return moment.tz("Asia/Karachi").format("HH:mm:ss YYYY/MM/DD");
-};
 
 // Controller to create the user
 export const createUserController = async (
@@ -30,12 +29,11 @@ export const createUserController = async (
   }
 
   try {
-    // Define the user limit
     const USER_LIMIT = 100;
 
     // Check the current number of users in the database
     const userCount = await Users.countDocuments();
-    
+
     if (userCount >= USER_LIMIT) {
       res.status(403).json({
         error:
@@ -141,7 +139,7 @@ export const verifyUserController = async (
 
     if (user.verifyStatus === "pending") {
       user.verifyStatus = "verified";
-      user.verified_at = formatDate();
+      user.verified_at = formatDateHelper();
       await user.save();
     } else {
       res.status(500).json({ message: "User already verified" });
@@ -187,11 +185,27 @@ export const loginUserController = async (
       const JWT_SECRET = process.env.JWT_SECRET;
       const authToken = jwt.sign({ email: user.email }, `${JWT_SECRET}`);
 
-      // Respond with the token
-      res.status(200).json({
-        message: "Login successful",
-        authToken: authToken,
+      const UserBehaviour: UserBehaviourType = new UsersBehaviours({
+        user_id: user._id,
+        username: user.username,
+        email: user.email,
+        action: "login",
+        action_performed_at: formatDateHelper(),
       });
+
+      const savedUserBehaviour = await UserBehaviour.save();
+
+      if (savedUserBehaviour) {
+        // Respond with the token
+        res.status(200).json({
+          message: "Login successful",
+          authToken: authToken,
+        });
+        return;
+      } else {
+        res.status(500).json({ msg: "logout failed" });
+        return;
+      }
     } else {
       // generate JWT Token for verify account
       const JWT_SECRET = process.env.JWT_SECRET;
@@ -211,14 +225,14 @@ export const loginUserController = async (
   }
 };
 
-// controller to get user details
+// Controller to get user details
 export const getUserDetailsController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const userId = req.user.id;
+    const userId = req.user?.id;
     console.log(userId);
 
     const user = await Users.findById(userId).select("-password");
@@ -236,14 +250,14 @@ export const getUserDetailsController = async (
   }
 };
 
-// controller to delete user & user data
+// Controller to delete user & user data
 export const deleteUserController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
     // Find and Delete the user by ID
     const deleteUser = await Users.findByIdAndDelete(userId);
@@ -258,14 +272,62 @@ export const deleteUserController = async (
     const deleteUserData = await IpAddressDetailsData.deleteMany({
       user_id: userId,
     });
-
-    res.status(200).json({
-      msg: "User account and associated data deleted successfully",
-      deletedRecords: {
-        user: deleteUser,
-        userData: `${deleteUserData.deletedCount} files deleted successfully`,
-      },
+    const deleteUserBehaviour = await UsersBehaviours.deleteMany({
+      user_id: userId,
     });
+    const deleteUserPlan = await UsersPlans.deleteOne({ user_id: userId });
+
+    if (deleteUserData || deleteUserBehaviour || deleteUserPlan) {
+      res.status(200).json({
+        msg: "User account and associated data deleted successfully",
+        deletedRecords: {
+          user: deleteUser,
+          userData: `${deleteUserData.deletedCount} files deleted successfully`,
+        },
+      });
+    }else{
+      res.status(500).json({msg: "Internal Server Error."});
+      return;
+    }
+  } catch (err) {
+    res.status(500).json({ msg: (err as Error).message });
+  } finally {
+    next();
+  }
+};
+
+// Controller to logout user
+export const logoutUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const userId = req.user?.id;
+    const resultedUser = await Users.findById({ _id: userId });
+
+    if (!resultedUser) {
+      res.status(404).json({ msg: "User Not found" });
+      return;
+    }
+
+    const UserBehaviour: UserBehaviourType = new UsersBehaviours({
+      user_id: resultedUser._id,
+      username: resultedUser.username,
+      email: resultedUser.email,
+      action: "logout",
+      action_performed_at: formatDateHelper(),
+    });
+
+    const savedUserBehaviour = await UserBehaviour.save();
+
+    if (savedUserBehaviour) {
+      res.status(200).json({ msg: "logout successfully" });
+      return;
+    } else {
+      res.status(500).json({ msg: "logout failed" });
+      return;
+    }
   } catch (err) {
     res.status(500).json({ msg: (err as Error).message });
   } finally {

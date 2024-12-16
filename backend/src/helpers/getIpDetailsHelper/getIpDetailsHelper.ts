@@ -21,7 +21,7 @@ const dbPath = path.join(
   }
 })();
 
-export const getIpDetails = async (
+export const getIpDetailsHelper = async (
   ip: string
 ): Promise<maxmind.CityResponse | null> => {
   if (!lookup) {
@@ -36,3 +36,5 @@ export const getIpDetails = async (
     return null;
   }
 };
+
+export default getIpDetailsHelper;

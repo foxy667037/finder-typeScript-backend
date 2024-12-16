@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const connectToMongo = async (MONGO_URL:string) => {
+const connectToMongo = async (MONGO_URL:string):Promise<void> => {
   await mongoose
     .connect(MONGO_URL, {
       dbName: "finder",

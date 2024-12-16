@@ -1,6 +1,12 @@
-import mongoose, { Document, Schema, Model } from "mongoose";
+import mongoose, {
+  Document,
+  Schema,
+  Model,
+  StringSchemaDefinition,
+} from "mongoose";
 
 export interface UserBehaviourType extends Document {
+  user_id: StringSchemaDefinition;
   username: string;
   email: string;
   action: string;
@@ -8,9 +14,14 @@ export interface UserBehaviourType extends Document {
 }
 
 const UserBehaviourSchema: Schema<UserBehaviourType> = new Schema({
-  username: { type: String, unique: true, required: true },
-  email: { type: String, unique: true, required: true },
-  action: {type:String, enum: ["login", "logout", "update_profile"]},
+  user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    required: true,
+  },
+  username: { type: String, required: true },
+  email: { type: String, required: true },
+  action: { type: String},
   action_performed_at: { type: String, required: true, default: null },
 });
 
