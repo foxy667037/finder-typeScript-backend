@@ -1,17 +1,20 @@
-import express from "express";
 import cors from "cors";
-import getIp from "./routes/getIp/getIpRoutes.js";
+import dotenv from "dotenv";
+import express from "express";
 import user from "./routes/user/userRoutes.js";
+import getIp from "./routes/getIp/getIpRoutes.js";
 import connectToMongo from "./databases/mongodb/mongodb.js";
-import passwordReset from "./routes/passwordReset/passwordReset.js";
 import contactForm from "./routes/contactForm/contactForm.js";
 import userActivity from "./routes/userActivity/userActivity.js";
+import passwordReset from "./routes/passwordReset/passwordReset.js";
+
+dotenv.config();
 
 const app = express();
 
 const PORT: number = 4000;
 
-const MONGO_URL: string = "mongodb://localhost:27017/";
+const MONGO_URL: string = `mongodb+srv://${process.env.MONGO_CONNECT_URL_USER}:${process.env.MONGO_CONNECT_URL_PASS}@trango-db.0jcyp.mongodb.net/?retryWrites=true&w=majority`;
 
 connectToMongo(MONGO_URL);
 
@@ -25,7 +28,7 @@ app.use("/api/getIp", getIp);
 
 app.use("/api/contact-form", contactForm);
 
-app.use("/api/user-activity", userActivity); 
+app.use("/api/user-activity", userActivity);
 
 app.use("/api/password-reset", passwordReset);
 
