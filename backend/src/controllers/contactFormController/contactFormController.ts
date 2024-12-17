@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
-import ContactForms from "../../models/ContactForm/ContactForm.js";
-import { ContactFormType } from "../../models/ContactForm/ContactForm.js";
+import ContactForms from "../../models/ContactForm/ContactForm.ts";
+import { ContactFormType } from "../../models/ContactForm/ContactForm.ts";
 import UsersBehaviours, {
   UserBehaviourType,
-} from "../../models/UsersBehaviour/UsersBehaviour.js";
-import Users from "../../models/Users/Users.js";
-import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.js";
+} from "../../models/UsersBehaviour/UsersBehaviour.ts";
+import Users from "../../models/Users/Users.ts";
+import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.ts";
 
 export const contactFormSendController = async (
   req: Request,

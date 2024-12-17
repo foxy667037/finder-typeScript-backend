@@ -3,16 +3,16 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
-import Users, { UserType } from "../../models/Users/Users.js";
-import verifyJwtTokenHelper from "../../helpers/verifyJwtTokenHelper/verifyJwtTokenHelper.js";
-import IpAddressDetailsData from "../../models/IpAddressDetailsData/IpAddressDetailsData.js";
-import generateRandomStringHelper from "../../helpers/generateRandomStringHelper/generateRandomStringHelper.js";
-import UsersPlans from "../../models/UsersPlans/UsersPlans.js";
-import { UserPlanType } from "../../models/UsersPlans/UsersPlans.js";
+import Users, { UserType } from "../../models/Users/Users.ts";
+import verifyJwtTokenHelper from "../../helpers/verifyJwtTokenHelper/verifyJwtTokenHelper.ts";
+import IpAddressDetailsData from "../../models/IpAddressDetailsData/IpAddressDetailsData.ts";
+import generateRandomStringHelper from "../../helpers/generateRandomStringHelper/generateRandomStringHelper.ts";
+import UsersPlans from "../../models/UsersPlans/UsersPlans.ts";
+import { UserPlanType } from "../../models/UsersPlans/UsersPlans.ts";
 import UsersBehaviours, {
   UserBehaviourType,
-} from "../../models/UsersBehaviour/UsersBehaviour.js";
-import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.js";
+} from "../../models/UsersBehaviour/UsersBehaviour.ts";
+import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.ts";
 
 dotenv.config();
 

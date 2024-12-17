@@ -1,12 +1,12 @@
 {
   "name": "finder-backend",
   "version": "1.0.0",
-  "main": "src/app.js",
+  "main": "src/app.ts",
   "type": "module",
   "scripts": {
     "build": "tsc && npm run copy-mmdb",
     "copy-mmdb": "cpx \"src/**/*.mmdb\" dist/",
-    "start": "node dist/app.js",
+    "start": "node dist/app.ts",
     "dev": "concurrently \"tsc -w\"  \"nodemon dist/app.js\" "
   },
   "author": "",

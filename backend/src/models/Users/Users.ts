@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
-import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.js";
+import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.ts";
 
 export interface UserType extends Document {
   googleId?: string | null;

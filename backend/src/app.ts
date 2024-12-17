@@ -1,12 +1,12 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import user from "./routes/user/userRoutes.js";
-import getIp from "./routes/getIp/getIpRoutes.js";
-import connectToMongo from "./databases/mongodb/mongodb.js";
-import contactForm from "./routes/contactForm/contactForm.js";
-import userActivity from "./routes/userActivity/userActivity.js";
-import passwordReset from "./routes/passwordReset/passwordReset.js";
+import user from "./routes/user/userRoutes.ts";
+import getIp from "./routes/getIp/getIpRoutes.ts";
+import connectToMongo from "./databases/mongodb/mongodb.ts";
+import contactForm from "./routes/contactForm/contactForm.ts";
+import userActivity from "./routes/userActivity/userActivity.ts";
+import passwordReset from "./routes/passwordReset/passwordReset.ts";
 
 dotenv.config();
 

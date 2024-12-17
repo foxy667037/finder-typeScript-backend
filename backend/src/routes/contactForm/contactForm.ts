@@ -1,7 +1,7 @@
 import express, { Router } from "express";
-import { validateContactForm } from "../../validations/contactForm/contactFormValidations.js";
-import fetchUserData from "../../middlewares/fetchUserData/fetchUserData.js";
-import { contactFormSendController } from "../../controllers/contactFormController/contactFormController.js";
+import { validateContactForm } from "../../validations/contactForm/contactFormValidations.ts";
+import fetchUserData from "../../middlewares/fetchUserData/fetchUserData.ts";
+import { contactFormSendController } from "../../controllers/contactFormController/contactFormController.ts";
 
 const router: Router = express.Router();
 
