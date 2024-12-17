@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2024",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "target": "ES2023",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "module": "NodeNext",                                /* Specify what module code is generated. */
+    "lib":["ES2023", "DOM"],
     "rootDir": "./src",                                  /* Specify the root folder within your source files. */
     "outDir": "./dist",                                  /* Specify the output folder for compiled files. */
     "esModuleInterop": true,                             /* Enables compatibility with CommonJS modules. */
