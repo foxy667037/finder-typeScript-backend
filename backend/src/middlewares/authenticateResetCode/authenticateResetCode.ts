@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Users from "../../models/Users/Users.js";
+import Users from "../../models/Users/Users.ts";
 import jwt from "jsonwebtoken";
 
 const authenticateResetCode = async (

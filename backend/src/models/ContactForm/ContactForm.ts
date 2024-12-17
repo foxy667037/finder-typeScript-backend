@@ -4,7 +4,7 @@ import mongoose, {
   Model,
   StringSchemaDefinition,
 } from "mongoose";
-import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.js";
+import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.ts";
 
 export interface ContactFormType extends Document {
   user_id: StringSchemaDefinition;

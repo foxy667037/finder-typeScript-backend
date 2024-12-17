@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Users from "../../models/Users/Users.js";
+import Users from "../../models/Users/Users.ts";
 
 export const authenticateUserAccessToken = async (
   req: Request,

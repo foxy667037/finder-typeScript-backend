@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { getIpDetailsHelper } from "../../helpers/getIpDetailsHelper/getIpDetailsHelper.js";
-import IpAddressDetailsData from "../../models/IpAddressDetailsData/IpAddressDetailsData.js";
-import UsersPlans from "../../models/UsersPlans/UsersPlans.js";
+import { getIpDetailsHelper } from "../../helpers/getIpDetailsHelper/getIpDetailsHelper.ts";
+import IpAddressDetailsData from "../../models/IpAddressDetailsData/IpAddressDetailsData.ts";
+import UsersPlans from "../../models/UsersPlans/UsersPlans.ts";
 import { validationResult } from "express-validator";
 import UsersBehaviours, {
   UserBehaviourType,
-} from "../../models/UsersBehaviour/UsersBehaviour.js";
-import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.js";
+} from "../../models/UsersBehaviour/UsersBehaviour.ts";
+import formatDateHelper from "../../helpers/getFormatDateHelper/getFormatDateHelper.ts";
 
 // Controller to get IP address details and return geolocation data
 export const getIpAddressDetailsController = async (
