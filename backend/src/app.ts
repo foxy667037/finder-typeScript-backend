@@ -5,6 +5,7 @@ import user from "./routes/user/userRoutes.js";
 import connectToMongo from "./databases/mongodb/mongodb.js";
 import passwordReset from "./routes/passwordReset/passwordReset.js";
 import contactForm from "./routes/contactForm/contactForm.js";
+import userActivity from "./routes/userActivity/userActivity.js";
 
 const app = express();
 
@@ -18,13 +19,15 @@ app.use(express.json());
 
 app.use(cors());
 
-app.use("/api/getIp", getIp);
-
 app.use("/api/user", user);
 
-app.use("/api/password-reset", passwordReset);
+app.use("/api/getIp", getIp);
 
 app.use("/api/contact-form", contactForm);
+
+app.use("/api/user-activity", userActivity); 
+
+app.use("/api/password-reset", passwordReset);
 
 app.get("/", (req, res) => {
   res.send("backend working!");

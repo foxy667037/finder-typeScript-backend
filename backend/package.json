@@ -4,9 +4,9 @@
   "main": "src/app.js",
   "type": "module",
   "scripts": {
+    "start": "node dist/app.js",
     "build": "tsc && npm run copy-mmdb",
     "copy-mmdb": "cpx \"src/**/*.mmdb\" dist/",
-    "start": "node dist/app.js",
     "dev": "concurrently \"tsc -w\"  \"nodemon dist/app.js\" "
   },
   "author": "",
