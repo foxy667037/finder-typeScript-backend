@@ -3,13 +3,13 @@ import {
   requestCodeController,
   verifyCodeController,
   resetPasswordController,
-} from "../../controllers/passwordResetController/passwordResetController.ts";
+} from "../../controllers/passwordResetController/passwordResetController.js";
 import {
   validateUserEmail,
   validateCode,
   validatePassword,
-} from "../../validations/passwordReset/passwordResetValidations.ts";
-import authenticateResetCode from "../../middlewares/authenticateResetCode/authenticateResetCode.ts";
+} from "../../validations/passwordReset/passwordResetValidations.js";
+import authenticateResetCode from "../../middlewares/authenticateResetCode/authenticateResetCode.js";
 
 const router: Router = express.Router();
 
