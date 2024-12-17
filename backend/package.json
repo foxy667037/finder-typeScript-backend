@@ -7,7 +7,6 @@
     "build": "npm install --save-dev @types/node && tsc && npm run copy-mmdb",
     "copy-mmdb": "cpx \"src/**/*.mmdb\" dist/",
     "start": "node dist/app.js",
-    "postinstall": "npm install",
     "dev": "concurrently \"tsc -w\"  \"nodemon dist/app.js\" "
   },
   "author": "foxy",
