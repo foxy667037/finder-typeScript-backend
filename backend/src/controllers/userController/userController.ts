@@ -285,8 +285,8 @@ export const deleteUserController = async (
           userData: `${deleteUserData.deletedCount} files deleted successfully`,
         },
       });
-    }else{
-      res.status(500).json({msg: "Internal Server Error."});
+    } else {
+      res.status(500).json({ msg: "Internal Server Error." });
       return;
     }
   } catch (err) {
@@ -330,6 +330,119 @@ export const logoutUserController = async (
     }
   } catch (err) {
     res.status(500).json({ msg: (err as Error).message });
+  } finally {
+    next();
+  }
+};
+
+// Controller for updating user details
+export const updateUserDetailsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+
+    // Extract userId from req.user
+    const userId = req.user?.id;
+    if (!userId) {
+      res.status(404).json({ error: "User Not Found" });
+      return;
+    }
+
+    let action: string = "";
+
+    // Destructure fields from the request body
+    const {
+      first_name,
+      second_name,
+      username,
+      email,
+      password,
+    }: {
+      first_name?: string;
+      second_name?: string;
+      username?: string;
+      email?: string;
+      password?: string;
+    } = req.body;
+
+    // Build a dynamic update object
+    const updateData: Partial<{
+      first_name: string;
+      second_name: string;
+      username: string;
+      email: string;
+      password: string;
+    }> = {};
+
+    if (first_name) {
+      updateData.first_name = first_name;
+      action = "first_name";
+    }
+    if (second_name) {
+      updateData.second_name = second_name;
+      action = "second_name";
+    }
+    if (username) {
+      updateData.username = username;
+      action = "username";
+    }
+    if (email) {
+      updateData.email = email;
+      action = "email";
+    }
+
+    // If password is provided, hash it securely
+    if (password) {
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      updateData.password = hashedPassword;
+      action = "password";
+    }
+
+    // Ensure there's at least one field to update
+    if (Object.keys(updateData).length === 0) {
+      res.status(400).json({ error: "No fields provided for update" });
+      return;
+    }
+
+    // Find and update the user
+    const resultedUser = await Users.findByIdAndUpdate(
+      userId,
+      { $set: updateData },
+      { new: true, select: "-password -secret_token -verifyStatus" }
+    );
+
+    if (!resultedUser) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+
+    // Create and save user behavior log
+    const UserBehaviour: UserBehaviourType = new UsersBehaviours({
+      user_id: resultedUser._id,
+      username: resultedUser.username,
+      email: resultedUser.email,
+      action: `${action} Updated`,
+      action_performed_at: formatDateHelper(),
+    });
+
+    await new UsersBehaviours(UserBehaviour).save();
+
+    // Send a success response
+    res.status(200).json({
+      message: "User updated successfully",
+      user: resultedUser,
+    });
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
   } finally {
     next();
   }

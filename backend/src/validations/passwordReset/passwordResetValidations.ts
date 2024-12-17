@@ -1,16 +1,16 @@
-import { body } from "express-validator";
+import { body, ValidationChain } from "express-validator";
 
-export const validateUserEmail = () => {
+export const validateUserEmail = (): ValidationChain[] => {
   return [body("email").isEmail().withMessage("Invalid email address")];
 };
 
-export const validateCode = () => {
+export const validateCode = (): ValidationChain[] => {
   return [
     body("code").isLength({ min: 6, max: 6 }).withMessage("Invalid code"),
   ];
 };
 
-export const validatePassword = () => {
+export const validatePassword = (): ValidationChain[] => {
   return [
     body("newPassword")
       .isString()

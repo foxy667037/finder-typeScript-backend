@@ -1,6 +1,6 @@
-import { body } from "express-validator";
+import { body, ValidationChain } from "express-validator";
 
-export const validateContactForm = () => {
+export const validateContactForm = (): ValidationChain[] => {
   return [
     body("name")
       .isString()
@@ -20,7 +20,7 @@ export const validateContactForm = () => {
     body("description")
       .isString()
       .withMessage("Description must be a string")
-      .isLength({ min: 15, max:300 })
+      .isLength({ min: 15, max: 300 })
       .withMessage("Description must be at least 150 to 300 characters long"),
   ];
 };

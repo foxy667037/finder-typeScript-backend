@@ -5,11 +5,13 @@ import {
   verifyUserController,
   getUserDetailsController,
   deleteUserController,
-  logoutUserController
+  logoutUserController,
+  updateUserDetailsController,
 } from "../../controllers/userController/userController.js";
 import {
   validateCreateUser,
   validateLoginUser,
+  validateUpdateUser,
 } from "../../validations/user/userValidations.js";
 import loginLimiter from "../../middlewares/loginLimiter/loginLimiter.js";
 import fetchUserData from "../../middlewares/fetchUserData/fetchUserData.js";
@@ -33,5 +35,13 @@ router.delete("/delete", fetchUserData, deleteUserController);
 
 // Route for logout user
 router.get("/logout", fetchUserData, logoutUserController);
+
+// Route for updating user details
+router.put(
+  "/update-details",
+  fetchUserData,
+  validateUpdateUser(),
+  updateUserDetailsController
+);
 
 export default router;
