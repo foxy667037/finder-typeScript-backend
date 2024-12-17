@@ -37,5 +37,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Service is running on port ${PORT}`);
+  console.log(`Service is running on port http://127.0.0.1:${PORT}`);
 });
