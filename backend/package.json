@@ -9,7 +9,7 @@
     "start": "node dist/app.js",
     "dev": "concurrently \"tsc -w\"  \"nodemon dist/app.js\" "
   },
-  "author": "",
+  "author": "foxy",
   "license": "ISC",
   "description": "",
   "dependencies": {

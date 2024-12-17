@@ -1,8 +1,8 @@
 import express, { Router } from "express";
-import {getIpAddressDetailsController, getIpAddressController, deleteIpAddresssDetailsDataController, externalIpAddressController} from "../../controllers/getIpController/getIpController.ts";
-import fetchUserData from "../../middlewares/fetchUserData/fetchUserData.ts";
-import authenticateUserAccessToken from "../../middlewares/authenticateUserAccessToken/authenticateUserAccessToken.ts";
-import { validateIpAddress } from "../../validations/ipAddress/ipAddressValidations.ts";
+import {getIpAddressDetailsController, getIpAddressController, deleteIpAddresssDetailsDataController, externalIpAddressController} from "../../controllers/getIpController/getIpController.js";
+import fetchUserData from "../../middlewares/fetchUserData/fetchUserData.js";
+import authenticateUserAccessToken from "../../middlewares/authenticateUserAccessToken/authenticateUserAccessToken.js";
+import { validateIpAddress } from "../../validations/ipAddress/ipAddressValidations.js";
 const router: Router = express.Router();
 
 // route for getting currently user ip

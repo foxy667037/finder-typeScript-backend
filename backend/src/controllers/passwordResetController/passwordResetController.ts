@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import Users from "../../models/Users/Users.ts";
-import generateRandomCode from "../../helpers/generateRandomCodeHelper/generateRandomCodeHelper.ts";
+import Users from "../../models/Users/Users.js";
+import generateRandomCode from "../../helpers/generateRandomCodeHelper/generateRandomCodeHelper.js";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";

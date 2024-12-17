@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import UsersBehaviours from "../../models/UsersBehaviour/UsersBehaviour.ts";
+import UsersBehaviours from "../../models/UsersBehaviour/UsersBehaviour.js";
 
 // Controller to deleted a IP address details
 export const deleteUserActivityController = async (

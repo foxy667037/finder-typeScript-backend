@@ -7,14 +7,14 @@ import {
   deleteUserController,
   logoutUserController,
   updateUserDetailsController,
-} from "../../controllers/userController/userController.ts";
+} from "../../controllers/userController/userController.js";
 import {
   validateCreateUser,
   validateLoginUser,
   validateUpdateUser,
-} from "../../validations/user/userValidations.ts";
-import loginLimiter from "../../middlewares/loginLimiter/loginLimiter.ts";
-import fetchUserData from "../../middlewares/fetchUserData/fetchUserData.ts";
+} from "../../validations/user/userValidations.js";
+import loginLimiter from "../../middlewares/loginLimiter/loginLimiter.js";
+import fetchUserData from "../../middlewares/fetchUserData/fetchUserData.js";
 
 const router: Router = express.Router();
 

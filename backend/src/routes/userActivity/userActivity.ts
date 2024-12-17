@@ -1,6 +1,6 @@
 import express, { Router } from "express";
-import fetchUserData from "../../middlewares/fetchUserData/fetchUserData.ts";
-import { deleteUserActivityController } from "../../controllers/userActivityController/userActivityController.ts";
+import fetchUserData from "../../middlewares/fetchUserData/fetchUserData.js";
+import { deleteUserActivityController } from "../../controllers/userActivityController/userActivityController.js";
 
 const router: Router = express.Router();
 
