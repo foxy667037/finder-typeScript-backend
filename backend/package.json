@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc && npm run copy-mmdb",
     "copy-mmdb": "cpx \"src/**/*.mmdb\" dist/",
-    "start": "node dist/app.ts",
+    "start": "node dist/app.js",
     "dev": "concurrently \"tsc -w\"  \"nodemon dist/app.js\" "
   },
   "author": "",
