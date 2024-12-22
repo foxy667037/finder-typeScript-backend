@@ -1,6 +1,3 @@
 [build]
-    command = "npm run build"
-    target = "dist"
-    
-[functions]
-    directory = "dist"    
+  command = "npm run build"
+  publish = "dist"
