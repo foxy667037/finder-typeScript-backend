@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2023",                                  /* Set the JavaScript language version for emitted JavaScript. */
+    "target": "ES2024",                                  /* Set the JavaScript language version for emitted JavaScript. */
     "module": "NodeNext",                                /* Specify what module code is generated. */
     "lib": ["ES2023", "DOM"],                            /* Include modern JavaScript features and DOM types. */
     "types": ["node"],                                   /* Include Node.js types explicitly. */
