@@ -33,7 +33,7 @@ app.use("/api/user-activity", userActivity);
 app.use("/api/password-reset", passwordReset);
 
 app.get("/", (req, res) => {
-  res.send("backend working!");
+  res.status(200).json({msg: "backend working!"});
 });
 
 app.listen(PORT, () => {
