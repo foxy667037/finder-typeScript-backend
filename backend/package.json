@@ -11,7 +11,7 @@
   },
   "author": "Foxy",
   "license": "ISC",
-  "description": "",
+  "description": "foxy",
   "dependencies": {
     "@netlify/functions": "^3.0.0",
     "axios": "^1.7.9",

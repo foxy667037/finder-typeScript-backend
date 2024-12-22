@@ -1,7 +1,0 @@
-[build]
-  command = "npm run build"
-  directory = "backend"  
-  publish = "dist"  
-
-[functions]
-  directory = "dist/functions"  # Make sure this is the directory where your serverless functions reside
