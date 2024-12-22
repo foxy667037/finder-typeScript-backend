@@ -172,9 +172,23 @@ export const externalIpAddressController = async (
 ): Promise<void> => {
   try {
     const user_id = req.user.id;
-    const resultedUser = await UsersPlans.findOne({ user_id: user_id });
+    const resultedUser = await UsersPlans.findOne({ user_id });
+
     if (resultedUser) {
-      const apiLimit = resultedUser.user_api_request_limit;
+      const now = new Date();
+
+      // Check if the API limit reset date has passed
+      if (resultedUser.apiLimitResetDate && now >= resultedUser.apiLimitResetDate) {
+        const nextReset = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+        resultedUser.currently_user_api_request = 0;
+        resultedUser.remaining_api_request = resultedUser.user_free_api_request_limit;
+        resultedUser.apiLimitResetDate = nextReset;
+
+        await resultedUser.save();
+      }
+
+      const apiLimit = resultedUser.user_free_api_request_limit;
       const apiUsed = resultedUser.currently_user_api_request;
 
       if (apiUsed < apiLimit) {
@@ -194,13 +208,11 @@ export const externalIpAddressController = async (
         const latitude = locationData?.location?.latitude;
         const longitude = locationData?.location?.longitude;
 
-        // Generate Google Maps link if latitude and longitude are available
         const googleMapsLink =
           latitude && longitude
             ? `https://www.google.com/maps?q=${latitude},${longitude}`
             : "Unknown";
 
-        // Respond with location data
         const fetchedData = {
           ip,
           country: {
@@ -244,19 +256,10 @@ export const externalIpAddressController = async (
         if (fetchedData) {
           res.status(200).json(fetchedData);
 
-          const user_id = req.user.id;
+          resultedUser.currently_user_api_request += 1;
+          resultedUser.remaining_api_request = apiLimit - resultedUser.currently_user_api_request;
 
-          // Find the user plan based on the user ID
-          const resultedUser = await UsersPlans.findOne({ user_id: user_id });
-
-          if (resultedUser) {
-            const resultedSavedUser =
-              resultedUser.currently_user_api_request + 1;
-
-            resultedUser.currently_user_api_request = resultedSavedUser;
-
-            await resultedUser.save();
-          }
+          await resultedUser.save();
         } else {
           res.status(404).json({ message: "Location data not found" });
         }
@@ -264,7 +267,6 @@ export const externalIpAddressController = async (
         res.status(405).json({
           msg: "Your API limit is full. Upgrade your user plan to continue.",
         });
-        return;
       }
     } else {
       res.status(401).json({ msg: "Unauthorized" });
@@ -275,3 +277,4 @@ export const externalIpAddressController = async (
     next();
   }
 };
+

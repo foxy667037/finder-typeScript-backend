@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 import user from "./routes/user/userRoutes.js";
 import getIp from "./routes/getIp/getIpRoutes.js";
+import "./helpers/resetApiLimitsTask/resetApiLimitsTask.js";
 import connectToMongo from "./databases/mongodb/mongodb.js";
 import contactForm from "./routes/contactForm/contactForm.js";
 import userActivity from "./routes/userActivity/userActivity.js";
