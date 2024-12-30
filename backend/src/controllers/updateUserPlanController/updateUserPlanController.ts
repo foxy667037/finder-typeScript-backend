@@ -30,7 +30,7 @@ export const updateUserPlanController = async (
         resultedUser.paidApiLimitResetDate = new Date(
           Date.now() + 30 * 24 * 60 * 60 * 1000
         );
-        // resultedUser.paidApiLimitResetDate = new Date(Date.now() + 1 * 60 * 1000); // 1 minute for testing
+        // resultedUser.paidApiLimitResetDate = new Date(Date.now() + 1 * 60 * 1000); // 1 minute for testing only
         resultedUser.paidApiLimitResetDate.setMilliseconds(0); // Set milliseconds to zero
 
         const UserBehaviour: UserBehaviourType = new UsersBehaviours({
@@ -58,7 +58,7 @@ export const updateUserPlanController = async (
         resultedUser.paidApiLimitResetDate = new Date(
           Date.now() + 30 * 24 * 60 * 60 * 1000
         );
-        // resultedUser.paidApiLimitResetDate = new Date(Date.now() + 1 * 60 * 1000); // 1 minute for testing
+        // resultedUser.paidApiLimitResetDate = new Date(Date.now() + 1 * 60 * 1000); // 1 minute for testing only
         resultedUser.paidApiLimitResetDate.setMilliseconds(0); // Set milliseconds to zero
 
         const UserBehaviour: UserBehaviourType = new UsersBehaviours({
