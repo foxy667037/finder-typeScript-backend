@@ -8,6 +8,7 @@ import connectToMongo from "./databases/mongodb/mongodb.js";
 import contactForm from "./routes/contactForm/contactForm.js";
 import userActivity from "./routes/userActivity/userActivity.js";
 import passwordReset from "./routes/passwordReset/passwordReset.js";
+import updatePlan from "./routes/updateUserPlan/updateUserPlan.js";
 
 dotenv.config();
 
@@ -32,6 +33,8 @@ app.use("/api/contact-form", contactForm);
 app.use("/api/user-activity", userActivity);
 
 app.use("/api/password-reset", passwordReset);
+
+app.use("/api/update", updatePlan);
 
 app.get("/", (req, res) => {
   res.status(200).json({msg: "backend working!"});

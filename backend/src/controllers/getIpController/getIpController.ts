@@ -175,20 +175,11 @@ export const externalIpAddressController = async (
     const resultedUser = await UsersPlans.findOne({ user_id });
 
     if (resultedUser) {
-      const now = new Date();
-
-      // Check if the API limit reset date has passed
-      if (resultedUser.apiLimitResetDate && now >= resultedUser.apiLimitResetDate) {
-        const nextReset = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-
-        resultedUser.currently_user_api_request = 0;
-        resultedUser.remaining_api_request = resultedUser.user_free_api_request_limit;
-        resultedUser.apiLimitResetDate = nextReset;
-
-        await resultedUser.save();
-      }
-
-      const apiLimit = resultedUser.user_free_api_request_limit;
+      // Check if the user has a Basic plan
+      const isBasicPlan = resultedUser.user_plan === "Basic";
+      const apiLimit = isBasicPlan
+        ? resultedUser.user_free_api_request_limit
+        : resultedUser.user_paid_api_request_limit;
       const apiUsed = resultedUser.currently_user_api_request;
 
       if (apiUsed < apiLimit) {
@@ -213,7 +204,7 @@ export const externalIpAddressController = async (
             ? `https://www.google.com/maps?q=${latitude},${longitude}`
             : "Unknown";
 
-        const fetchedData = {
+        let fetchedData: object = {
           ip,
           country: {
             name: locationData?.country?.names?.en || "Unknown",
@@ -230,34 +221,50 @@ export const externalIpAddressController = async (
             isoCode: locationData?.subdivisions?.[0]?.iso_code || "Unknown",
             geonameId: locationData?.subdivisions?.[0]?.geoname_id || "Unknown",
           },
-          latitude,
-          longitude,
-          timezone: locationData?.location?.time_zone || "Unknown",
-          accuracyRadius: locationData?.location?.accuracy_radius || "Unknown",
           googleMapsLink,
-          privacy: {
-            isProxy: locationData?.traits?.is_anonymous_proxy || false,
-            isTorExitNode: locationData?.traits?.is_tor_exit_node || false,
-            isAnonymous: locationData?.traits?.is_anonymous || false,
-            isAnonymousVpn: locationData?.traits?.is_anonymous_vpn || false,
-            isHostingProvider:
-              locationData?.traits?.is_hosting_provider || false,
-          },
-          network: {
-            isp: locationData?.traits?.isp || "Unknown",
-            organization: locationData?.traits?.organization || "Unknown",
-            autonomousSystemNumber:
-              locationData?.traits?.autonomous_system_number || "Unknown",
-            autonomousSystemOrganization:
-              locationData?.traits?.autonomous_system_organization || "Unknown",
-          },
         };
+
+        // If the user's plan is Basic, show only limited data
+        if (isBasicPlan) {
+          fetchedData = {
+            ...fetchedData,
+            msg: "Upgrade your plan to get full data",
+          };
+        } else {
+          // For Intermediate or Advanced plans, include full data
+          fetchedData = {
+            ...fetchedData,
+            latitude,
+            longitude,
+            timezone: locationData?.location?.time_zone || "Unknown",
+            accuracyRadius:
+              locationData?.location?.accuracy_radius || "Unknown",
+            privacy: {
+              isProxy: locationData?.traits?.is_anonymous_proxy || false,
+              isTorExitNode: locationData?.traits?.is_tor_exit_node || false,
+              isAnonymous: locationData?.traits?.is_anonymous || false,
+              isAnonymousVpn: locationData?.traits?.is_anonymous_vpn || false,
+              isHostingProvider:
+                locationData?.traits?.is_hosting_provider || false,
+            },
+            network: {
+              isp: locationData?.traits?.isp || "Unknown",
+              organization: locationData?.traits?.organization || "Unknown",
+              autonomousSystemNumber:
+                locationData?.traits?.autonomous_system_number || "Unknown",
+              autonomousSystemOrganization:
+                locationData?.traits?.autonomous_system_organization ||
+                "Unknown",
+            },
+          };
+        }
 
         if (fetchedData) {
           res.status(200).json(fetchedData);
 
           resultedUser.currently_user_api_request += 1;
-          resultedUser.remaining_api_request = apiLimit - resultedUser.currently_user_api_request;
+          resultedUser.remaining_api_request =
+            apiLimit - resultedUser.currently_user_api_request;
 
           await resultedUser.save();
         } else {
@@ -277,4 +284,3 @@ export const externalIpAddressController = async (
     next();
   }
 };
-

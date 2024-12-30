@@ -10,7 +10,8 @@ export interface UserPlanType extends Document {
   user_paid_api_request_limit: number;
   remaining_api_request: number;
   currently_user_api_request: number;
-  apiLimitResetDate: Date;
+  freeApiLimitResetDate: Date;
+  paidApiLimitResetDate: Date | null;
 }
 
 const UserPlanSchema: Schema<UserPlanType> = new Schema({
@@ -60,7 +61,7 @@ const UserPlanSchema: Schema<UserPlanType> = new Schema({
     required: true,
     default: 0,
   },
-  apiLimitResetDate: {
+  freeApiLimitResetDate: {
     type: Date,
     default: () => {
       const resetDate = new Date();
@@ -68,6 +69,10 @@ const UserPlanSchema: Schema<UserPlanType> = new Schema({
       resetDate.setTime(resetDate.getTime() + 30 * 24 * 60 * 60 * 1000); 
       return resetDate;
     },
+  },
+  paidApiLimitResetDate: {
+    type: Date || null,
+    default: null,
   },
 });
 
