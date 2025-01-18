@@ -33,6 +33,7 @@ cron.schedule('* * * * *', async () => {
         user.remaining_api_request = 60000;
         user.user_paid_api_request_limit = 0;
         user.paidApiLimitResetDate = null;
+        user.freeApiLimitResetDate = now.add(30, 'days').toDate();
         console.log(`Intermediate plan timeout, resetting user ${user.username} back to Basic plan.`);
       } else if (user.user_plan === 'Extreme') {
         user.user_plan = 'Basic';
@@ -40,6 +41,7 @@ cron.schedule('* * * * *', async () => {
         user.remaining_api_request = 60000;
         user.user_paid_api_request_limit = 0;
         user.paidApiLimitResetDate = null;
+        user.freeApiLimitResetDate = now.add(30, 'days').toDate();
         console.log(`Extreme plan timeout, resetting user ${user.username} back to Basic plan.`);
       }
       await user.save();

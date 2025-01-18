@@ -16,7 +16,8 @@ const app = express();
 
 const PORT: number = 4000;
 
-const MONGO_URL: string = `mongodb+srv://${process.env.MONGO_CONNECT_URL_USER}:${process.env.MONGO_CONNECT_URL_PASS}@trango-db.0jcyp.mongodb.net/?retryWrites=true&w=majority`;
+// const MONGO_URL: string = `mongodb+srv://${process.env.MONGO_CONNECT_URL_USER}:${process.env.MONGO_CONNECT_URL_PASS}@trango-db.0jcyp.mongodb.net/?retryWrites=true&w=majority`;
+const MONGO_URL: string = "mongodb://localhost:27017/";
 
 connectToMongo(MONGO_URL);
 
